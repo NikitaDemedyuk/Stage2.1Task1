@@ -4,37 +4,21 @@ import 'dart:async';
 import 'package:path/path.dart' as path;
 
 class ErrorReadFile {
-  String getErrorMessage() {
-    return '\nSome problems with reading file...\n';
-  }
+    String getErrorMessage() {
+      return '\nSome problems with reading file...\n';
+    }
 }
 
 class KeyNumberException implements Exception {
-  String getErrorMessage() {
-    return "\nIncorrect index\n";
-  }
-}
-
-Map setMap() {
-  var mapFizzBizz = <int, String>{};
-  for(int i = 1; i < 101; ++i) {
-    if (i % 3 == 0 && i % 5 == 0) {
-      mapFizzBizz[i] = "FizzBizz";
-    } else if (i % 5 == 0) {
-      mapFizzBizz[i] = "Bizz";
-    } else if (i % 3 == 0) {
-      mapFizzBizz[i] = "Fizz";
-    } else {
-      mapFizzBizz[i] = "Nothing";
+    String getErrorMessage() {
+      return "\nIncorrect index\n";
     }
-  }
-  return mapFizzBizz;
 }
 
 Future<int> readFromFileKeyNumber(File filePath) async {
     Stream<String> lines = filePath.openRead()
-        .transform(utf8.decoder)       // Decode bytes to UTF-8.
-        .transform(LineSplitter());
+        .transform(utf8.decoder)         // Decode bytes to UTF-8.
+        .transform(LineSplitter());      // Convert stream to individual lines.
 
     int numberKey = 0;
 
@@ -43,7 +27,7 @@ Future<int> readFromFileKeyNumber(File filePath) async {
         numberKey = int.parse(line);
       }
     } catch (e) {
-      print('Error: $e');
+      stdout.write('Error: $e');
     }
     return numberKey;
 }
@@ -96,14 +80,18 @@ Future <int> main() async {
 
   stdout.write('Program start!\n');
   stdout.write('-------------------------------------------------------------------------------\n');
+  stdout.write('Reading map from a file "InputMap.txt"\n');
 
-  final File filePathToRead = normalizePath("/Users/nikita/Developer/Hometask/Programming/Dart/Stage 2.1/Task1(Stage2.1)", "InputKeyNumber.txt");
+  final File filePathToRead = normalizePath(Directory.current.parent.path, "InputKeyNumber.txt");
+  final File filePathToReadMap = normalizePath(Directory.current.parent.path, "InputMap.txt");
 
-  Map mapFizzBizz = setMap();
+  final keyNumbers =  readFromFileKeyNumber(filePathToRead);
+
+  Map mapFizzBizz = await readFromFileMap(filePathToReadMap);
 
   try {
-    final int numberKey = await readFromFileKeyNumber(filePathToRead);
-    stdout.write('Key number from file "InputKeyNumber.txt" : $numberKey\n');
+    final int numberKey = await keyNumbers;
+    stdout.write('\nKey number from file "InputKeyNumber.txt" : $numberKey\n');
     if (numberKey < 1 || numberKey > 100) {
       throw KeyNumberException();
     }
@@ -116,17 +104,11 @@ Future <int> main() async {
   stdout.write('-------------------------------------------------------------------------------\n');
   
   stdout.write('Writing map to a file "Output.txt"\n');
-  final File? filePathToWrite = normalizePath("/Users/nikita/Developer/Hometask/Programming/Dart/Stage 2.1/Task1(Stage2.1)", "Output.txt");
+  final File? filePathToWrite = normalizePath(Directory.current.parent.path, "Output.txt");
   writeToFile(filePathToWrite, mapFizzBizz);
 
   stdout.write('-------------------------------------------------------------------------------\n');
 
-  stdout.write('Reading map form a file "InputMap.txt"\n');
-  final File filePathToReadMap = normalizePath("/Users/nikita/Developer/Hometask/Programming/Dart/Stage 2.1/Task1(Stage2.1)", "InputMap.txt");
-  Map mapFizzBizzFromFile = await readFromFileMap(filePathToReadMap);
-  printMap(mapFizzBizzFromFile);
-
-  stdout.write('-------------------------------------------------------------------------------\n');
   stdout.write('End of program\n');
   return 0;
 }
