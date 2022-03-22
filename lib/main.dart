@@ -46,6 +46,7 @@ Future<Map> readFromFileMap(File filePath) async {
     } catch (e) {
       stdout.write('Error: $e');
     }
+    Future.delayed(const Duration(seconds: 10));
     return mapFizzBizzFromFile;
 }
 
@@ -86,11 +87,16 @@ Future <int> main() async {
     final mapFizzBizzFromFile = readFromFileMap(filePathToReadMap);
 
     final File filePathToRead = normalizePath(Directory.current.parent.path, "InputKeyNumber.txt");
-    final numberKeyFromFile =  readFromFileKeyNumber(filePathToRead);
+    final numberKeyFromFile = readFromFileKeyNumber(filePathToRead);
+
+    // stdout.write('\n$numberKeyFromFile\n');
+
+    // stdout.write('\n$mapFizzBizzFromFile\n');
 
     final Map mapFizzBizz = await mapFizzBizzFromFile;
 
     try {
+      stdout.write('\n$numberKeyFromFile\n');
       final int numberKey = await numberKeyFromFile;
       stdout.write('\nKey number from file "InputKeyNumber.txt" : $numberKey\n');
       if (numberKey < 1 || numberKey > 100) {
