@@ -89,9 +89,9 @@ Future <int> main() async {
     final File filePathToRead = normalizePath(Directory.current.parent.path, "InputKeyNumber.txt");
     final numberKeyFromFile = readFromFileKeyNumber(filePathToRead);
 
-    // stdout.write('\n$numberKeyFromFile\n');
+    stdout.write('\n$numberKeyFromFile\n');
 
-    // stdout.write('\n$mapFizzBizzFromFile\n');
+    stdout.write('\n$mapFizzBizzFromFile\n');
 
     final Map mapFizzBizz = await mapFizzBizzFromFile;
 
